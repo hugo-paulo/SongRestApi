@@ -21,7 +21,10 @@ namespace SongRestApiIntergrationTest
             //Still need to add login testing
 
             //Arrange
+            //need this list
             //var albumListTest = new List<Album> { new Album { AlbumID = 1, AlbumName = "Test_1", AlbumPrice = 5.99m }, new Album { AlbumID = 2, AlbumName = "Test_2", AlbumPrice = 6.99m } };
+            //add the list with the range method so that we seed the database
+            //because we using in memory database we dont need a moc repository
 
             //Act
             var response = await TestClient.GetAsync(ApiRoutes.album.GetAllAlbums);
