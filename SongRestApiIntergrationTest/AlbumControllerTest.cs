@@ -10,6 +10,7 @@ using FluentAssertions;
 using Xunit;
 using SongRestApi.Models;
 using SongRestApi.Controllers.V1.DTOS.Requests;
+using SongRestApi.DAL;
 
 namespace SongRestApiIntergrationTest
 {
@@ -21,11 +22,7 @@ namespace SongRestApiIntergrationTest
             //Still need to add login testing
 
             //Arrange
-            //need this list
-            //var albumListTest = new List<Album> { new Album { AlbumID = 1, AlbumName = "Test_1", AlbumPrice = 5.99m }, new Album { AlbumID = 2, AlbumName = "Test_2", AlbumPrice = 6.99m } };
-            //add the list with the range method so that we seed the database
-            //because we using in memory database we dont need a moc repository
-
+            await SeedInMemoryDBAsync(); //because we using in memory database we dont need a moc repository
             //Act
             var response = await TestClient.GetAsync(ApiRoutes.album.GetAllAlbums);
 
@@ -35,7 +32,8 @@ namespace SongRestApiIntergrationTest
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             //Needs the System.Net.Http.Formatting (needs Microsoft.AspNet.WebApi.Client package)
-            (await response.Content.ReadAsAsync<List<Album>>()).Should().HaveCount(0); //?20 on local db server //?problem with this test is will break if table is updated, thus not automated?
+            (await response.Content.ReadAsAsync<List<Album>>()).Should().HaveCount(3); //?20 on local db server and 3 in the in-memory-database
+
         }
 
         [Fact]

@@ -7,6 +7,7 @@ using SongRestApi.Contracts.V1;
 using SongRestApi.Controllers.V1.DTOS.Requests;
 using SongRestApi.Controllers.V1.DTOS.Responses;
 using SongRestApi.DAL;
+using SongRestApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,6 +53,26 @@ namespace SongRestApiIntergrationTest
         {
             var response = await TestClient.PostAsJsonAsync(ApiRoutes.album.CreateAlbum, albumCreateRequest);
             return await response.Content.ReadAsAsync<AlbumReadDTO>();
-        }        
+        }
+
+        //Method for seeding the database
+        //?Need to add a range create on the albums app controller?
+
+        //see this link for possible clean up https://www.youtube.com/watch?v=ddrR440JtiA
+        protected async Task SeedInMemoryDBAsync()
+        {
+            var albums = new[]
+            {
+                new Album{AlbumID = 1, AlbumName = "Test_1", AlbumPrice = 1.99m},
+                new Album{AlbumID = 2, AlbumName = "Test_2", AlbumPrice = 2.99m},
+                new Album{AlbumID = 3, AlbumName = "Test_3", AlbumPrice = 1.99m},
+            };
+
+            foreach (var a in albums)
+            {
+                var response = await TestClient.PostAsJsonAsync(ApiRoutes.album.CreateAlbum, a);
+            }
+            
+        }
     }
 }
