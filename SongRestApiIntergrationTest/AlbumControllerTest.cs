@@ -23,9 +23,15 @@ namespace SongRestApiIntergrationTest
 
             //Arrange
             await SeedInMemoryDBAsync(); //because we using in memory database we dont need a moc repository
+            List<Album> control = new List<Album>() {
+                new Album{AlbumID = 1, AlbumName = "Test_1", AlbumPrice = 1.99m},
+                new Album{AlbumID = 2, AlbumName = "Test_2", AlbumPrice = 2.99m},
+                new Album{AlbumID = 3, AlbumName = "Test_3", AlbumPrice = 1.99m},
+            };
+
             //Act
             var response = await TestClient.GetAsync(ApiRoutes.album.GetAllAlbums);
-
+            
             //Assert
             //The Should().Be() extension methods are part of the FluentAssertion package/library we installed
             //The HttpstatusCode.OK needs the System.Net library
@@ -34,6 +40,10 @@ namespace SongRestApiIntergrationTest
             //Needs the System.Net.Http.Formatting (needs Microsoft.AspNet.WebApi.Client package)
             (await response.Content.ReadAsAsync<List<Album>>()).Should().HaveCount(3); //?20 on local db server and 3 in the in-memory-database
 
+            //?Why is this not working getting nulls when looking into the content and the count is 1 off the correct?
+            //var returnedAlbumList = await response.Content.ReadAsAsync<Album>();
+            ////returnedAlbumList.Should().BeEquivalentTo(control);
+            //Assert.Equal(control, returnedAlbumList);
         }
 
         [Fact]
