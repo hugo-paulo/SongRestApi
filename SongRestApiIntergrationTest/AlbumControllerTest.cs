@@ -44,7 +44,7 @@ namespace SongRestApiIntergrationTest
             //(await response.Content.ReadAsAsync<List<Album>>()).Should().HaveCount(albums.Count);//HaveCount(3), this is better than hardcode because we can change number of albums in memory db without breaking code
             //(await response.Content.ReadAsAsync<List<Album>>()).Should().BeSameAs(albums);
             albums.Count.Should().Be(expectation.Count);
-            albums.Should().BeEquivalentTo(expectation, options => options.ComparingByValue<Album>()); //?This is giving issues, the comparision is the same?
+            albums.Should().BeEquivalentTo(expectation, options => options.ComparingByValue<Album>()); //?This is giving issues, the comparision is the same, possible answer is wanting to compare same object's memory address?
             
         }
 
