@@ -27,6 +27,7 @@ namespace SongRestApiIntergrationTest
             var appFactory = new WebApplicationFactory<Startup>()
                 .WithWebHostBuilder(builder =>
                 {
+                    //This is used to set up an in memory DB
                     builder.ConfigureServices(services =>
                     {
                         //services.RemoveAll(typeof(ApplicationDbContext)); //?why is the db not being removed and thus using db for testing?
@@ -40,9 +41,12 @@ namespace SongRestApiIntergrationTest
                             services.Remove(dbContext);
                         }
 
-                        services.AddDbContext<ApplicationDbContext>(options => { options.UseInMemoryDatabase("TestDb"); }); 
-                        //need to install Microsoft.EntityFrameworkCore.InMemory to use UseInMemoryDatabase() method
+                        services.AddDbContext<ApplicationDbContext>(options => { options.UseInMemoryDatabase("TestDb"); });
+
+                        //services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("Server=DESKTOP-48F44VT; Database=SongDB; Trusted_Connection=True;"));
+
                     });
+
                 });
 
             TestClient = appFactory.CreateClient();
@@ -62,11 +66,10 @@ namespace SongRestApiIntergrationTest
         //This is not working
         protected async Task SeedInMemoryDBAsync()
         {
-            var albums = new[]
-            {
-                new Album{AlbumID = 1, AlbumName = "Test_1", AlbumPrice = 1.99m},
-                new Album{AlbumID = 2, AlbumName = "Test_2", AlbumPrice = 2.99m},
-                new Album{AlbumID = 3, AlbumName = "Test_3", AlbumPrice = 1.99m},
+            var albums = new List<Album> {
+                new Album{AlbumID = 1, AlbumName = "Test_1", AlbumPrice = 1.99m, Songs = null},
+                new Album{AlbumID = 2, AlbumName = "Test_2", AlbumPrice = 2.99m, Songs = null},
+                new Album{AlbumID = 3, AlbumName = "Test_3", AlbumPrice = 1.99m, Songs = null}
             };
 
             foreach (var a in albums)
