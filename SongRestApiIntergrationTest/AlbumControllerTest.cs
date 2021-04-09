@@ -11,6 +11,7 @@ using Xunit;
 using SongRestApi.Models;
 using SongRestApi.Controllers.V1.DTOS.Requests;
 using SongRestApi.DAL;
+using Newtonsoft.Json;
 
 namespace SongRestApiIntergrationTest
 {
@@ -23,13 +24,14 @@ namespace SongRestApiIntergrationTest
 
             //Arrange
             await SeedInMemoryDBAsync();
-            
-            var expectation = new List<Album> {
-                new Album{AlbumID = 1, AlbumName = "Test_1", AlbumPrice = 1.99m, Songs = null},
-                new Album{AlbumID = 2, AlbumName = "Test_2", AlbumPrice = 2.99m, Songs = null},
-                new Album{AlbumID = 3, AlbumName = "Test_3", AlbumPrice = 1.99m, Songs = null}
-            };
 
+            //var expectation = new List<Album> {
+            //    new Album{AlbumID = 1, AlbumName = "Test_1", AlbumPrice = 1.99m, Songs = null},
+            //    new Album{AlbumID = 2, AlbumName = "Test_2", AlbumPrice = 2.99m, Songs = null},
+            //    new Album{AlbumID = 3, AlbumName = "Test_3", AlbumPrice = 1.99m, Songs = null}
+            //};
+            var expectation = GetAlbumTestList();
+            
             //Act
             var response = await TestClient.GetAsync(ApiRoutes.album.GetAllAlbums);
             

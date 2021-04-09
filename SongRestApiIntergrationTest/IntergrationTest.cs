@@ -59,12 +59,7 @@ namespace SongRestApiIntergrationTest
             return await response.Content.ReadAsAsync<AlbumReadDTO>();
         }
 
-        //Method for seeding the database
-        //?Need to add a range create on the albums app controller?
-
-        //see this link for possible clean up https://www.youtube.com/watch?v=ddrR440JtiA
-        //This is not working
-        protected async Task SeedInMemoryDBAsync()
+        protected List<Album> GetAlbumTestList()
         {
             var albums = new List<Album> {
                 new Album{AlbumID = 1, AlbumName = "Test_1", AlbumPrice = 1.99m, Songs = null},
@@ -72,11 +67,22 @@ namespace SongRestApiIntergrationTest
                 new Album{AlbumID = 3, AlbumName = "Test_3", AlbumPrice = 1.99m, Songs = null}
             };
 
+            return albums;
+        }
+        
+        //Method for seeding the database
+        //?Need to add a range create on the albums app controller?
+
+        //see this link for possible clean up https://www.youtube.com/watch?v=ddrR440JtiA
+        //This is not working
+        protected async Task SeedInMemoryDBAsync()
+        {
+            var albums = GetAlbumTestList();
+
             foreach (var a in albums)
             {
                 var response = await TestClient.PostAsJsonAsync(ApiRoutes.album.CreateAlbum, a);
             }
-            
         }
     }
 }
