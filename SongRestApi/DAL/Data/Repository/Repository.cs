@@ -24,18 +24,19 @@ namespace SongRestApi.DAL.Data.Repository
             _dbSet = dbContext.Set<T>();
         }
 
-        //?change this to bool?
-        public void AddItem(T entity)
+        public async Task<bool> AddItemAsync(T entity)
         {
             if (entity == null)
             {
-                throw new ArgumentException(nameof(entity));
+                //throw new ArgumentException(nameof(entity)); //add this exception when checking bool return of the method (where its called controller)
+                return false;
             }
 
-            _dbSet.Add(entity);
+            await _dbSet.AddAsync(entity);
+            return true;
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null)
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null)
         {
             IQueryable<T> query = _dbSet;
 
@@ -49,10 +50,10 @@ namespace SongRestApi.DAL.Data.Repository
                 return orderBy(query).ToList();
             }
 
-            return query.ToList();
+            return await query.ToArrayAsync();
         }
 
-        public T GetFirstOrDefault(Expression<Func<T, bool>> filter = null)
+        public async Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter = null)
         {
             IQueryable<T> query = _dbSet;
 
@@ -61,13 +62,13 @@ namespace SongRestApi.DAL.Data.Repository
                 query = query.Where(filter);
             }
 
-            return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
         }
 
         //Use this method when dont need to perform null checks
-        public T GetSingle(int id)
+        public async Task<T> GetSingleAsync(int id)
         {
-            return _dbSet.Find(id);
+            return await _dbSet.FindAsync(id);
         }
 
         //These types of methods (dont return obj) may seem to be return type of void, but is not ideal for trouble shooting (not knowing whats going on)

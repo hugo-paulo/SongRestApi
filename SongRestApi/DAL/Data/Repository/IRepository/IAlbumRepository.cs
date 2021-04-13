@@ -14,6 +14,6 @@ namespace SongRestApi.DAL.Data.Repository.IRepository
         //?temp?
         bool BasicUpdate(Album album);
 
-        bool Update(int id, Album album);
+        bool UpdateWithMapping(int id, Album album);
     }
 }
