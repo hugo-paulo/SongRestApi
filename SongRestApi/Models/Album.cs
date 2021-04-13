@@ -19,6 +19,7 @@ namespace SongRestApi.Models
         [MaxLength(100, ErrorMessage = "Album name can't be greater than 100 characters")]
         public string AlbumName { get; set; }
         [Required]
+        [DataType(DataType.Currency)]
         [RegularExpression(@"^\d+.?\d{0,2}$", ErrorMessage ="Price value can only have decimal of two places")] //the regex pattern is a digit and has 2 decimal places
         [Range(0, 99999.99, ErrorMessage = "The price can only be 5 digits long")]
         [Column("AlbumPrice", TypeName = "decimal(5,2)")]
