@@ -10,6 +10,6 @@ namespace SongRestApi.DAL.Data.Repository.IRepository
         IAlbumRepository Album { get; }
         ISongRepository Song { get; }
 
-        bool Save();
+        Task<bool> SaveAsync();
     }
 }

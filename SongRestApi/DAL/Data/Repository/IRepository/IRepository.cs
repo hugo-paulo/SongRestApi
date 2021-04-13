@@ -8,13 +8,13 @@ namespace SongRestApi.DAL.Data.Repository.IRepository
 {
     public interface IRepository<T> where T : class
     {
-        void AddItem(T entity);
+        Task<bool> AddItemAsync(T entity);
 
-        T GetSingle(int id);
+        Task<T> GetSingleAsync(int id);
 
-        IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null);
+        Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null);
 
-        T GetFirstOrDefault(Expression<Func<T, bool>> filter = null);
+        Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter = null);
 
         bool Remove(int id);
 

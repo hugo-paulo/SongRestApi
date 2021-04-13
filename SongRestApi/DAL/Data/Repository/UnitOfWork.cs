@@ -22,16 +22,16 @@ namespace SongRestApi.DAL.Data.Repository
 
         public ISongRepository Song { get; private set; }
 
-        public bool Save()
+        public async Task<bool> SaveAsync()
         {
-            return (_ctx.SaveChanges() > 0);
+            return (await _ctx.SaveChangesAsync()) > 0;
         }
 
         public void Dispose()
         {
             if (!disposed)
             {
-                _ctx.Dispose();
+                 _ctx.Dispose();
                 disposed = true;
             }
         }

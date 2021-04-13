@@ -32,9 +32,9 @@ namespace SongRestApi.Controllers.V1
         //[HttpGet("api/v1/album")] //cumbersome and not cndusive to versioning
         [HttpGet(ApiRoutes.album.GetAllAlbums)] //We getting the route string from the Apiroutes class
         //public ActionResult<IEnumerable<Album>> GetAllAlbums()
-        public ActionResult<IEnumerable<AlbumReadDTO>> GetAllAlbums()
+        public async Task<ActionResult<IEnumerable<AlbumReadDTO>>> GetAllAlbums()
         {
-            var albumData = _uw.Album.GetAll();
+            var albumData = await _uw.Album.GetAllAsync();
 
             if (albumData == null)
             {
@@ -47,10 +47,10 @@ namespace SongRestApi.Controllers.V1
 
         //GET api/v1/album/1
         [HttpGet(ApiRoutes.album.GetSingleAlbum)]
-        public ActionResult<AlbumReadDTO> GetSingleAlbum([FromRoute] int id)
+        public async Task<ActionResult<AlbumReadDTO>> GetSingleAlbum([FromRoute] int id)
         {
             //var albumData = _uw.Album.GetSingle(id);
-            var albumData = _uw.Album.GetFirstOrDefault(a => a.AlbumID == id);
+            var albumData = await _uw.Album.GetFirstOrDefaultAsync(a => a.AlbumID == id);
 
             if (albumData == null)
             {
@@ -62,12 +62,12 @@ namespace SongRestApi.Controllers.V1
 
         //Post  api/v1/album
         [HttpPost(ApiRoutes.album.CreateAlbum)]
-        public ActionResult<AlbumReadDTO> CreateAlbum([FromBody] AlbumCreateDTO albumCreateDto)
+        public async Task<ActionResult<AlbumReadDTO>> CreateAlbum([FromBody] AlbumCreateDTO albumCreateDto)
         {
             var albumData = _mapper.Map<Album>(albumCreateDto);
-            _uw.Album.AddItem(albumData); //?need to change the additem method to bool and check the itemAdded if and return 404?
+            await _uw.Album.AddItemAsync(albumData); //?need to change the additem method to bool and check the itemAdded if and return 404?
 
-            var saved = _uw.Save(); //need the save or the location header will be null
+            var saved = await _uw.SaveAsync(); //need the save or the location header will be null
 
             if (!saved)
             {
@@ -91,7 +91,7 @@ namespace SongRestApi.Controllers.V1
         //For updating there are 2 aproaches full and partial(full uses PUT verb and partial uses PATCH verb), seems PATCH is favoured
         //PUT api/v1/album/{id}
         [HttpPut(ApiRoutes.album.UpdateAlbum)]
-        public ActionResult UpdateAlbum([FromRoute] int id, [FromBody] AlbumUpdateDTO albumUpdateDto)
+        public async Task<ActionResult> UpdateAlbum([FromRoute] int id, [FromBody] AlbumUpdateDTO albumUpdateDto)
         {
             //needs the id of which obj and the actual obj (? temp need to implement DTO mapping)
             //?Dont need this been extracted to the Update method?
@@ -106,12 +106,13 @@ namespace SongRestApi.Controllers.V1
             //}
             ////When calling this method theres no need to perform null checks because its done in the Update method
             //var albumData = _uw.Album.GetSingle(id);
-            ////For async update return 202
+            ////For async code 202 is used to state request has been accpeted for processing but not commited, eg return StatusCode(202, albumData)
             //return Ok(albumData);
 
             /** This method will create an instance of the album and return the data from memory **/
 
-            //Create a new object and map the request parameters to this object, *best method
+            //Create a new object and map the request parameters to this object, 
+            //This is redundent we can call the UpdateWithMappings method which will do the mapping  
             var albumDto = new AlbumUpdateDTO
             {
                 AlbumID = id,
@@ -122,7 +123,9 @@ namespace SongRestApi.Controllers.V1
             var albumData = _mapper.Map<Album>(albumDto);
 
             //Unlike the previous example we only need to pass the obj and not the id too
-            var isUpdated = _uw.Album.Update(albumData);
+            var isUpdated = _uw.Album.Update(albumData); //because we not checking
+            //use below method only when variable albumDto is not created (will cause redudency), and dont forget to return variable albumUpdateDto
+            //var isUpdated = _uw.Album.UpdateWithMapping(id, albumUpdateDto);
 
             if (!isUpdated)
             {
@@ -130,7 +133,13 @@ namespace SongRestApi.Controllers.V1
             }
 
             //_mapper.Map(AlbumUpdateDTO, albumData); //this is different to the create mapping
-            var saved = _uw.Save();
+            var saved = await _uw.SaveAsync();
+
+            //This need to be test dont know if works, this seems to get hit on success returns 200 writes to DB but makes the "return OK" un-used
+            //if (_uw.SaveAsync() != null && !_uw.SaveAsync().IsCompleted)
+            //{
+            //    return StatusCode(202, albumDto);
+            //}
 
             if (!saved)
             {
@@ -152,9 +161,9 @@ namespace SongRestApi.Controllers.V1
         */
         //PATCH api/v1/album/{id}
         [HttpPatch(ApiRoutes.album.PatchAlbum)]
-        public ActionResult PatchUpdateAlbum(int id, JsonPatchDocument<AlbumUpdateDTO> patchJsonDoc) //Must be of type JsonPatchDocument
+        public async Task<ActionResult> PatchUpdateAlbum(int id, JsonPatchDocument<AlbumUpdateDTO> patchJsonDoc) //Must be of type JsonPatchDocument
         {
-            var albumData = _uw.Album.GetSingle(id);
+            var albumData = await _uw.Album.GetSingleAsync(id);
 
             if (albumData == null)
             {
@@ -174,7 +183,7 @@ namespace SongRestApi.Controllers.V1
 
             _uw.Album.Update(albumData);
 
-            var saved = _uw.Save();
+            var saved =  await _uw.SaveAsync();
 
             if (!saved)
             {
@@ -188,7 +197,7 @@ namespace SongRestApi.Controllers.V1
         //The delete doesnt use DTO's
         ////POST api/v1/album/{id}
         [HttpDelete(ApiRoutes.album.DeleteAlbum)]
-        public ActionResult DeleteAlbum([FromRoute] int id)
+        public async Task<ActionResult> DeleteAlbum([FromRoute] int id)
         {
             var isDeleted = _uw.Album.Remove(id);
 
@@ -197,7 +206,7 @@ namespace SongRestApi.Controllers.V1
                 return NotFound();
             }
 
-            var saved = _uw.Save(); //dont forget obj will not be reomved from the database
+            var saved = await _uw.SaveAsync(); //dont forget obj will not be reomved from the database
 
             if (!saved)
             {
