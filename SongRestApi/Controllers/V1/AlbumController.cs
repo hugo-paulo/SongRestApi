@@ -230,9 +230,12 @@ namespace SongRestApi.Controllers.V1
             }
 
             //Need a new column in the albums table that has popularity, also need another method in service class to add +1 to this column when user visits/purchase specific album
+            //This is linq statement 
             var topAlbums = (from a in albumsList
-                            orderby a.AlbumID descending
-                            select a).Take(5);
+                             orderby a.AlbumID descending
+                             select a).Take(5);
+            //this is linq method statement (same as above but alot shorter)
+            //var topAlbums = albumsList.OrderByDescending(a => a.AlbumID).Take(5);
 
             if (topAlbums == null)
             {
