@@ -18,7 +18,7 @@ namespace SongRestApiIntergrationTest
     public class AlbumControllerTest : IntergrationTest
     {
         [Fact]
-        public async Task GetAllAlbumsTest()
+        public async Task Test_ReturnAllAlbums_Sucessfully()
         {
             //Still need to add login testing
 
@@ -52,7 +52,7 @@ namespace SongRestApiIntergrationTest
         }
 
         [Fact]
-        public async Task CreateAlbumTest()
+        public async Task Test_CreateAlbum_Successfully()
         {
             //Arrange
             var createdAlbumObj = await CreateAlbumAsync(new AlbumCreateDTO { AlbumName = "Album Test 1", AlbumPrice = 6.88m });            
