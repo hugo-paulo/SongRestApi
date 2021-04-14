@@ -218,6 +218,30 @@ namespace SongRestApi.Controllers.V1
             return NoContent();
         }
 
+        [HttpGet(ApiRoutes.album.GetTop5Albums)]
+        public async Task<ActionResult> GetTopFiveAlbums()
+        {
+            //These should be done in a service class
+            var albumsList = await _uw.Album.GetAllAsync();
+
+            if (albumsList == null)
+            {
+                return NotFound();
+            }
+
+            //Need a new column in the albums table that has popularity, also need another method in service class to add +1 to this column when user visits/purchase specific album
+            var topAlbums = (from a in albumsList
+                            orderby a.AlbumID descending
+                            select a).Take(5);
+
+            if (topAlbums == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(topAlbums);
+        }
+
         //Note! with Rest api the the DTO will act like View Models in a MVC (thus we can customise what models we send to the user)
 
         //nick chapsas vid 8

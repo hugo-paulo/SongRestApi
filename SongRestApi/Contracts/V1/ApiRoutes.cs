@@ -28,6 +28,8 @@ namespace SongRestApi.Contracts.V1
             public const string UpdateAlbum = UrlPrefix + "/album/{id}";
             public const string PatchAlbum = UrlPrefix + "/album/{id}";
             public const string DeleteAlbum = UrlPrefix + "/album/{id}";
+            //Route for a method that returns popular albums
+            public const string GetTop5Albums = UrlPrefix + "album/top5";
         }
         
     }

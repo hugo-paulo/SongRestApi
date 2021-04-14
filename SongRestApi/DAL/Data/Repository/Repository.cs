@@ -35,7 +35,7 @@ namespace SongRestApi.DAL.Data.Repository
             await _dbSet.AddAsync(entity);
             return true;
         }
-
+           
         public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null)
         {
             IQueryable<T> query = _dbSet;
