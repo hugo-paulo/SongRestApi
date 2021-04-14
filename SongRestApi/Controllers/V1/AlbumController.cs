@@ -223,6 +223,9 @@ namespace SongRestApi.Controllers.V1
         {
             //These should be done in a service class
             var albumsList = await _uw.Album.GetAllAsync();
+            //The below method may be better as we reducing memory usage and leverage cpu processing, in addition we only need one if statement
+            //remember to return albumsList variable in the OK()
+            //var albumsList = (await _uw.Album.GetAllAsync()).OrderByDescending(a => a.AlbumID).Take(5);
 
             if (albumsList == null)
             {
