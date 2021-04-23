@@ -11,11 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using SongRestApi.DAL;
-using SongRestApi.DAL.Data.Repository;
-using SongRestApi.DAL.Data.Repository.IRepository;
 using SongRestApi.Installers;
-using Swashbuckle.AspNetCore.Swagger;
 
 namespace SongRestApi
 {
@@ -48,7 +44,12 @@ namespace SongRestApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            else
+            {
+                //This else can be commented
+                //for mobile apps, allows http traffic redirection
+                app.UseHttpsRedirection();
+            }
             //The Advanced use of swagger uses the appsetting.json file and specific model for setting options
             var swaggerOptions = new Options.SwaggerOptions();
             //The GetSection is the name in the appsettings.json file, thus binding this with our instance eg above
@@ -70,7 +71,7 @@ namespace SongRestApi
             //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Our Song API");
             //});//basic
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseStaticFiles();
 

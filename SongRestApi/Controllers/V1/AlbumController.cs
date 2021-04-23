@@ -218,6 +218,7 @@ namespace SongRestApi.Controllers.V1
             return NoContent();
         }
 
+        ////GET api/v1/album/albumtop5
         [HttpGet(ApiRoutes.album.GetTop5Albums)]
         public async Task<ActionResult> GetTopFiveAlbums()
         {
@@ -248,12 +249,26 @@ namespace SongRestApi.Controllers.V1
             return Ok(topAlbums);
         }
 
-        //Note! with Rest api the the DTO will act like View Models in a MVC (thus we can customise what models we send to the user)
+        //? Note need to add async the methods in the albums repository and this controller ?
+        [HttpGet("api/v1/album/IncludeSongs")]
+        public ActionResult IncludeSongs()
+        {
+            var albumList = _uw.Album.GetAlbumsWithSongs();
 
-        //nick chapsas vid 8
+            if (albumList == null)
+            {
+                return NotFound();
+            }
+            
+            return Ok(albumList);
+        }
 
-        //les jackson tc 3:18:26
+            //Note! with Rest api the the DTO will act like View Models in a MVC (thus we can customise what models we send to the user)
 
-        //Also add a GET that will return album and songs (create a Read DTO that has an Ienumrable that include the song)
-    }
+            //nick chapsas vid 8
+
+            //les jackson tc 3:18:26
+
+            //Also add a GET that will return album and songs (create a Read DTO that has an Ienumrable that include the song)
+        }
 }

@@ -1,4 +1,5 @@
-﻿using SongRestApi.DAL.Data.Repository.IRepository;
+﻿using Microsoft.EntityFrameworkCore;
+using SongRestApi.DAL.Data.Repository.IRepository;
 using SongRestApi.Models;
 using System;
 using System.Collections.Generic;
@@ -69,6 +70,12 @@ namespace SongRestApi.DAL.Data.Repository
             //_ctx.SaveChanges();
 
             return true;
+        }
+
+        public List<Album> GetAlbumsWithSongs()
+        {
+            var albumsObj = _ctx.Album.Include(s => s.Songs).ToList();
+            return albumsObj;
         }
     }
 }

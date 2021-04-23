@@ -17,7 +17,6 @@ namespace SongRestApi.DAL.Data.Repository
         internal ApplicationDbContext _dbContext;
         internal DbSet<T> _dbSet;
 
-        //public Repository(DbContext dbContext)
         public Repository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -47,10 +46,10 @@ namespace SongRestApi.DAL.Data.Repository
 
             if (orderBy != null)
             {
-                return orderBy(query).ToList();
+                return await orderBy(query).ToListAsync();
             }
 
-            return await query.ToArrayAsync();
+            return await query.ToListAsync();
         }
 
         public async Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter = null)
@@ -96,5 +95,6 @@ namespace SongRestApi.DAL.Data.Repository
             _dbSet.Remove(entity);
             return true;
         }
+
     }
 }

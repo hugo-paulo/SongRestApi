@@ -12,7 +12,8 @@ namespace SongRestApi.Installers
 {
     public class DbContextInstaller : IInstaller
     {
-        public void InstallerServices(IServiceCollection services, IConfiguration configuration)
+
+        public void InstallerServices(IServiceCollection services, Microsoft.Extensions.Configuration.IConfiguration configuration)
         {
             //This will hold the code to setup The EF DB context for the Startup class
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("SongDbConnection")));

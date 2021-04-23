@@ -12,7 +12,9 @@ namespace SongRestApi.Installers
     {
         public void InstallerServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddControllers();
+            //services.AddControllers();
+            //Best used to return the data in correct presentation, thus can use the jsonProperty attibute
+            services.AddControllers().AddNewtonsoftJson(options => options.UseMemberCasing());
 
         }
     }

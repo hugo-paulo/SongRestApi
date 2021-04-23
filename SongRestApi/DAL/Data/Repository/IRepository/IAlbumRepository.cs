@@ -15,5 +15,7 @@ namespace SongRestApi.DAL.Data.Repository.IRepository
         bool BasicUpdate(Album album);
 
         bool UpdateWithMapping(int id, Album album);
+
+        public List<Album> GetAlbumsWithSongs();
     }
 }
