@@ -30,7 +30,8 @@ namespace SongRestApi.Models
         [ForeignKey("Album")]
         public int AlbumID { get; set; }
 
-        [JsonIgnore] //This attribute is needed so dont get self referention loop err when lazy loading (.include())
+        //This attribute is needed so dont get self referention loop err when lazy loading (.include())
+        [JsonIgnore]
         public virtual Album Album { get; set; }
     }
 }
