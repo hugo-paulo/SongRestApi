@@ -8,14 +8,14 @@ namespace SongRestApi.DAL.Data.Repository.IRepository
 {
     public interface IAlbumRepository : IRepository<Album>
     {
-        bool Update(Album album);
+        Task<bool> Update(Album album);
         //Dont need this method with an id argument/parameter
 
         //?temp?
         bool BasicUpdate(Album album);
 
-        bool UpdateWithMapping(int id, Album album);
+        Task<bool> UpdateWithMapping(int id, Album album);
 
-        public List<Album> GetAlbumsWithSongs();
+        Task<List<Album>> GetAlbumsWithSongs();
     }
 }

@@ -18,9 +18,9 @@ namespace SongRestApi.DAL.Data.Repository
         }
 
         //This method is the preferable because not only does it check for nulls but also checks wether obj is in the DB
-        public bool Update(Album album)
+        public async Task<bool> Update(Album album)
         {
-            var albumObj = _ctx.Album.FirstOrDefault(a => a.AlbumID == album.AlbumID);
+            var albumObj = await _ctx.Album.FirstOrDefaultAsync(a => a.AlbumID == album.AlbumID);
 
             if (albumObj == null)
             {
@@ -39,6 +39,7 @@ namespace SongRestApi.DAL.Data.Repository
 
         //this method will not search for the obj in the DB, however if the obj has already been searched for in the DB then use this method
         //eg the calling first or default in the controller
+        //Another reason this method isnt ideal is that using async becomes unessary complex
         public bool BasicUpdate(Album album)
         {
             if (album == null)
@@ -53,10 +54,10 @@ namespace SongRestApi.DAL.Data.Repository
 
         //?Need to refactor, maybe have the update and check null by methods seperaete that is called from here?
         //Don't need to use the method with an id argument/ parameter
-        public bool UpdateWithMapping(int id, Album album)
+        public async Task<bool> UpdateWithMapping(int id, Album album)
         {
             //This should be done on the end point so that we dont need to find the object twice
-            var albumObj = _ctx.Album.FirstOrDefault(a => a.AlbumID == id);
+            var albumObj = await _ctx.Album.FirstOrDefaultAsync(a => a.AlbumID == id);
 
             if (albumObj == null)
             {
@@ -72,9 +73,9 @@ namespace SongRestApi.DAL.Data.Repository
             return true;
         }
 
-        public List<Album> GetAlbumsWithSongs()
+        public async Task<List<Album>> GetAlbumsWithSongs()
         {
-            var albumsObj = _ctx.Album.Include(s => s.Songs).ToList();
+            var albumsObj = await _ctx.Album.Include(s => s.Songs).ToArrayAsync();
             return albumsObj;
         }
     }

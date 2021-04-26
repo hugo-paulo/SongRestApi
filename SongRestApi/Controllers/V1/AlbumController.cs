@@ -123,7 +123,7 @@ namespace SongRestApi.Controllers.V1
             var albumData = _mapper.Map<Album>(albumDto);
 
             //Unlike the previous example we only need to pass the obj and not the id too
-            var isUpdated = _uw.Album.Update(albumData); //because we not checking
+            var isUpdated = await _uw.Album.Update(albumData); //because we not checking
             //use below method only when variable albumDto is not created (will cause redudency), and dont forget to return variable albumUpdateDto
             //var isUpdated = _uw.Album.UpdateWithMapping(id, albumUpdateDto);
 
@@ -181,7 +181,7 @@ namespace SongRestApi.Controllers.V1
 
             _mapper.Map(commandToPatch, albumData);
 
-            _uw.Album.Update(albumData);
+            await _uw.Album.Update(albumData);
 
             var saved =  await _uw.SaveAsync();
 
@@ -251,9 +251,9 @@ namespace SongRestApi.Controllers.V1
 
         //? Note need to add async the methods in the albums repository and this controller ?
         [HttpGet("api/v1/album/IncludeSongs")]
-        public ActionResult IncludeSongs()
+        public async Task<ActionResult> IncludeSongs()
         {
-            var albumList = _uw.Album.GetAlbumsWithSongs();
+            var albumList = await _uw.Album.GetAlbumsWithSongs();
 
             if (albumList == null)
             {
