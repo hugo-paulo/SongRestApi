@@ -250,25 +250,39 @@ namespace SongRestApi.Controllers.V1
         }
 
         //? Note need to add async the methods in the albums repository and this controller ?
-        [HttpGet("api/v1/album/IncludeSongs")]
-        public async Task<ActionResult> IncludeSongs()
-        {
-            var albumList = await _uw.Album.GetAlbumsWithSongs();
+        //Retruning Album domain model
+        //[HttpGet("api/v1/album/IncludeSongs")]
+        //public async Task<ActionResult> IncludeSongs()
+        //{
+        //    var albumList = await _uw.Album.GetAlbumsWithSongs();
 
-            if (albumList == null)
+        //    if (albumList == null)
+        //    {
+        //        return NotFound();
+        //    }
+            
+        //    return Ok(albumList);
+        //}
+
+        [HttpGet("api/v1/album/IncludeSongs")]
+        public async Task<ActionResult<AlbumReadWithSongsDTO>> IncludeSongs()
+        {
+            var albumData = await _uw.Album.GetAlbumsWithSongs();
+
+            if (albumData == null)
             {
                 return NotFound();
             }
-            
-            return Ok(albumList);
+
+            return Ok(_mapper.Map<IEnumerable<AlbumReadWithSongsDTO>>(albumData));
         }
 
-            //Note! with Rest api the the DTO will act like View Models in a MVC (thus we can customise what models we send to the user)
+        //Note! with Rest api the the DTO will act like View Models in a MVC (thus we can customise what models we send to the user)
 
-            //nick chapsas vid 8
+        //nick chapsas vid 8
 
-            //les jackson tc 3:18:26
+        //les jackson tc 3:18:26
 
-            //Also add a GET that will return album and songs (create a Read DTO that has an Ienumrable that include the song)
-        }
+        //Also add a GET that will return album and songs (create a Read DTO that has an Ienumrable that include the song)
+    }
 }

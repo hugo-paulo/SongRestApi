@@ -21,6 +21,8 @@ namespace SongRestApi.Profiles
             CreateMap<AlbumCreateDTO, Album>();
             CreateMap<AlbumUpdateDTO, Album>();
             CreateMap<Album, AlbumUpdateDTO>();
+            //Mapping for reads of Albums including songs
+            CreateMap<Album, AlbumReadWithSongsDTO>();
         }
     }
 }

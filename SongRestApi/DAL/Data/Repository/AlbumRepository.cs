@@ -73,9 +73,10 @@ namespace SongRestApi.DAL.Data.Repository
             return true;
         }
 
+        //?need to alter the schema on swager to correctly reflect the output?
         public async Task<List<Album>> GetAlbumsWithSongs()
         {
-            var albumsObj = await _ctx.Album.Include(s => s.Songs).ToArrayAsync();
+            var albumsObj = await _ctx.Album.Include(s => s.Songs).ToListAsync();
             return albumsObj;
         }
     }
